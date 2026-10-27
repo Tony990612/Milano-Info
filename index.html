@@ -1,0 +1,1181 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>意欧晨报</title>
+<meta name="description" content="意大利与欧洲中文新闻、天气地图、米兰活动、夜店、街舞、房价和特价机票，每天米兰时间 7:00 更新。">
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* base reset so the page also stands alone outside the Claude viewer (GitHub Pages) */
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: Milanese tram-signage dashboard. Sticky control bar, map + Milan weather on top, city weather strip, news grid, events rail. */
+:root{
+  --bg:#eef1f4; --surface:#ffffff; --surface-2:#f6f8fa; --line:#d9dfe6; --line-2:#c4ccd6;
+  --ink:#13202f; --ink-2:#435162; --ink-3:#6c7887;
+  --accent:#e8a317;   /* tram ochre */
+  --accent-ink:#5a3d00;
+  --navy:#1d3a5c;
+  --red:#c8372d; --green:#2e7d55; --blue:#2f6db5; --violet:#6b4fb3; --teal:#1f8a8a; --pink:#b8467a;
+  --map-land:#dfe5ec; --map-stroke:#ffffff; --map-hot:#f2c45a; --map-sel:#e8a317;
+  --shadow:0 1px 2px rgba(19,32,47,.06),0 4px 16px rgba(19,32,47,.06);
+  --f-display:"Noto Serif SC","Songti SC",serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c141e; --surface:#131d29; --surface-2:#182433; --line:#243344; --line-2:#33465b;
+  --ink:#e6edf4; --ink-2:#a9b6c4; --ink-3:#7d8b9a; --accent:#f0b235; --accent-ink:#1a1200; --navy:#8fb4dc;
+  --red:#ff6b5f; --green:#5cc48d; --blue:#6aa5ec; --violet:#a58cf0; --teal:#4cc3c3; --pink:#ea7aae;
+  --map-land:#22303f; --map-stroke:#0c141e; --map-hot:#8a6a22; --map-sel:#f0b235;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c141e; --surface:#131d29; --surface-2:#182433; --line:#243344; --line-2:#33465b;
+  --ink:#e6edf4; --ink-2:#a9b6c4; --ink-3:#7d8b9a; --accent:#f0b235; --accent-ink:#1a1200; --navy:#8fb4dc;
+  --red:#ff6b5f; --green:#5cc48d; --blue:#6aa5ec; --violet:#a58cf0; --teal:#4cc3c3; --pink:#ea7aae;
+  --map-land:#22303f; --map-stroke:#0c141e; --map-hot:#8a6a22; --map-sel:#f0b235;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+button{font:inherit;color:inherit}
+a{color:var(--blue)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.num{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:14px 20px;flex-wrap:wrap;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0}
+.badge{width:34px;height:34px;border-radius:8px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:18px;flex:none}
+.brand h1{font-family:var(--f-display);font-weight:900;font-size:21px;margin:0;letter-spacing:.04em;line-height:1.1}
+.brand small{display:block;font-family:var(--f-data);font-size:10.5px;letter-spacing:.18em;color:var(--ink-3);text-transform:uppercase}
+.status{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex:none}
+.dot.live{background:var(--green);box-shadow:0 0 0 0 color-mix(in srgb,var(--green) 60%,transparent);animation:pulse 2.4s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@media (prefers-reduced-motion:reduce){.dot.live{animation:none}}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;padding:5px 14px;border-radius:999px;cursor:pointer;font-size:13.5px;color:var(--ink-2);white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface);font-weight:700}
+.seg.sm button{padding:3px 11px;font-size:12.5px}
+
+.brief{padding-block:14px 4px;color:var(--ink-2);font-size:14px;display:flex;gap:10px;align-items:baseline}
+.brief b{font-family:var(--f-data);font-size:11px;letter-spacing:.14em;color:var(--accent-ink);background:var(--accent);padding:1px 7px;border-radius:4px;flex:none}
+
+/* cards */
+main{display:grid;gap:18px;padding-block:14px 40px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;min-width:0;scroll-margin-top:72px}
+.card-h{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
+.card-h h2{font-family:var(--f-display);font-weight:900;font-size:18px;margin:0;letter-spacing:.03em}
+.card-h .sub{font-size:12px;color:var(--ink-3);font-family:var(--f-data)}
+.card-h .grow{flex:1}
+.row1{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr);gap:18px}
+@media (max-width:960px){.row1{grid-template-columns:1fr}}
+
+/* map */
+.mapcard{display:flex;flex-direction:column}
+.map-box{position:relative;padding:6px 10px 10px;flex:1;min-height:360px;display:flex}
+#map{width:100%;height:100%;min-height:340px;display:block;flex:1}
+#map .land{fill:var(--map-land);stroke:var(--map-stroke);stroke-width:.8;transition:fill .15s}
+#map .land.has{fill:color-mix(in srgb,var(--map-hot) 55%,var(--map-land))}
+#map .land.has2{fill:var(--map-hot)}
+#map .land.focus{fill:color-mix(in srgb,var(--navy) 22%,var(--map-land))}
+#map .land.hover,#map .land.sel{fill:var(--map-sel);stroke:var(--ink);stroke-width:1.2}
+#map .land.dim{opacity:.55}
+#map .city circle{fill:var(--ink);stroke:var(--surface);stroke-width:1.5}
+#map .city text{font-family:var(--f-data);font-size:11px;font-weight:600;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+#map .city .t{font-size:12px}
+#map .pin circle{fill:var(--red);stroke:var(--surface);stroke-width:2}
+#map .pin text{font-family:var(--f-data);font-size:10.5px;font-weight:600;fill:#fff;pointer-events:none}
+#map .city,#map .pin{cursor:pointer}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-3);padding:0 16px 12px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.tip{position:absolute;pointer-events:none;z-index:5;background:var(--surface);border:1px solid var(--line-2);border-radius:10px;box-shadow:var(--shadow);padding:10px 12px;width:260px;max-width:calc(100% - 20px);font-size:13px;line-height:1.5}
+.tip h4{margin:0 0 4px;font-family:var(--f-display);font-size:15px}
+.tip h4 small{font-family:var(--f-data);font-weight:400;color:var(--ink-3);font-size:11px;margin-left:6px}
+.tip .w{display:flex;align-items:center;gap:8px;margin:4px 0}
+.tip .w svg{width:28px;height:28px}
+.tip .w b{font-family:var(--f-data);font-size:20px}
+.tip ul{margin:6px 0 0;padding-left:16px;color:var(--ink-2)}
+.tip .mini{display:flex;gap:10px;flex-wrap:wrap;font-family:var(--f-data);font-size:11.5px;color:var(--ink-2)}
+.tip.sheet{pointer-events:auto;left:8px!important;right:8px;top:auto!important;bottom:8px;width:auto;max-width:none;max-height:72%;overflow:auto;padding:12px 14px 14px;font-size:13.5px}
+.tip .x{position:absolute;right:6px;top:6px;width:34px;height:34px;border:0;border-radius:50%;background:var(--surface-2);font-size:18px;line-height:1;cursor:pointer;color:var(--ink-2)}
+.tip .tn{display:block;width:100%;text-align:left;border:0;border-top:1px dashed var(--line);background:none;padding:9px 22px 9px 0;font-size:13.5px;line-height:1.45;cursor:pointer;position:relative}
+.tip .tn::after{content:"›";position:absolute;right:4px;top:50%;transform:translateY(-50%);color:var(--ink-3);font-size:18px}
+.tip .tn small{display:block;color:var(--ink-3);font-size:11px}
+.tip .tf{margin-top:8px;border:1px solid var(--ink);background:var(--ink);color:var(--surface);border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700;cursor:pointer;width:100%}
+.tip.sheet h4{padding-right:36px}
+.filter-chip{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:3px 10px;font-size:12.5px;cursor:pointer;font-weight:700}
+
+/* milan weather */
+.mw{padding:14px 16px 16px;display:grid;gap:14px}
+.mw-now{display:flex;align-items:center;gap:14px}
+.mw-now svg{width:64px;height:64px;flex:none}
+.mw-now .t{font-family:var(--f-data);font-size:52px;font-weight:500;line-height:1;letter-spacing:-.02em}
+.mw-now .d{font-size:15px;font-weight:700}
+.mw-now .f{font-size:12.5px;color:var(--ink-3)}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.facts div{background:var(--surface-2);border-radius:8px;padding:7px 8px}
+.facts span{display:block;font-size:11px;color:var(--ink-3)}
+.facts b{font-family:var(--f-data);font-size:14px;font-weight:600}
+.hours{overflow-x:auto;padding-bottom:4px}
+.hours svg{display:block}
+.hours text{font-family:var(--f-data);font-size:10.5px;fill:var(--ink-2)}
+.days{display:grid;gap:2px}
+.day{display:grid;grid-template-columns:52px 26px 34px 1fr 34px 40px;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.day:last-child{border-bottom:0}
+.day svg{width:24px;height:24px}
+.day .lo,.day .hi{font-family:var(--f-data);text-align:right}
+.day .hi{text-align:left;font-weight:600}
+.day .pp{font-family:var(--f-data);font-size:11.5px;color:var(--blue);text-align:right}
+.range{position:relative;height:6px;border-radius:3px;background:var(--surface-2)}
+.range i{position:absolute;top:0;bottom:0;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--accent))}
+.mw-sec{font-size:12px;font-weight:700;color:var(--ink-3);letter-spacing:.08em;border-top:1px solid var(--line);padding-top:10px;margin-bottom:-8px}
+@media (max-width:640px){.bar{position:static}.brand h1{font-size:19px}}
+.sun{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-3);font-family:var(--f-data)}
+
+/* city weather strip */
+.cities{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:14px 16px 16px}
+.city-t{border:1px solid var(--line);border-radius:10px;padding:10px 11px;display:grid;gap:4px;cursor:default;background:var(--surface)}
+.city-t:hover{border-color:var(--accent)}
+.city-t .top{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.city-t .n{font-weight:700;font-size:14px}
+.city-t .n small{display:block;font-weight:400;color:var(--ink-3);font-size:11px;font-family:var(--f-data)}
+.city-t svg{width:30px;height:30px;flex:none}
+.city-t .t{font-family:var(--f-data);font-size:24px;font-weight:500;line-height:1}
+.city-t .mm{font-family:var(--f-data);font-size:11.5px;color:var(--ink-2)}
+.city-t .next{display:flex;gap:6px;font-family:var(--f-data);font-size:10.5px;color:var(--ink-3);border-top:1px dashed var(--line);padding-top:5px}
+.city-t .next span{flex:1;text-align:center}
+.city-t .next svg{width:16px;height:16px;display:block;margin:0 auto}
+
+/* news */
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:5px 12px;cursor:pointer;font-size:13.5px;color:var(--ink-2)}
+.tab[aria-selected="true"]{border-color:var(--ink);background:var(--ink);color:var(--surface);font-weight:700}
+.tab .c{font-family:var(--f-data);font-size:11px;opacity:.7;margin-left:4px}
+.datebar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.datebar label{font-size:12px;color:var(--ink-3);margin-right:4px}
+.dchip{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:3px 9px;cursor:pointer;font-size:12.5px;line-height:1.3;text-align:center;min-width:52px}
+.dchip small{display:block;font-family:var(--f-data);font-size:10.5px;color:var(--ink-3)}
+.dchip[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--surface));font-weight:700}
+.dchip:disabled{opacity:.4;cursor:not-allowed}
+.datebar input[type=date]{font:inherit;font-size:12.5px;border:1px solid var(--line);border-radius:8px;padding:3px 8px;background:var(--surface);color:var(--ink)}
+.news{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding:16px}
+@media (max-width:1000px){.news{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.news{grid-template-columns:1fr}}
+.item{all:unset;box-sizing:border-box;display:flex;flex-direction:column;cursor:pointer;border-radius:10px;overflow:hidden;background:var(--surface);border:1px solid var(--line);min-width:0;transition:border-color .15s,transform .15s}
+.item:hover{border-color:var(--ink-3);transform:translateY(-1px)}
+.item:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.item .img{aspect-ratio:16/9;max-width:100%;background:var(--surface-2) center/cover no-repeat;position:relative}
+.item .img .ph{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:40px;color:color-mix(in srgb,var(--ink) 18%,transparent);background:repeating-linear-gradient(135deg,var(--surface-2) 0 12px,color-mix(in srgb,var(--line) 60%,var(--surface-2)) 12px 13px)}
+.item .body{padding:12px 13px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-3)}
+.pill{font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;color:#fff;background:var(--navy)}
+.pill.place{background:transparent;color:var(--ink-2);border:1px solid var(--line-2);font-weight:500}
+.item h3{margin:0;font-family:var(--f-display);font-weight:600;font-size:16.5px;line-height:1.45;text-wrap:balance}
+.item p{margin:0;color:var(--ink-2);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.item.lead{grid-column:span 2;flex-direction:row}
+.item.lead .img{flex:1.2;aspect-ratio:auto;min-height:260px}
+.item.lead .body{flex:1;padding:18px}
+.item.lead h3{font-size:22px;font-weight:900}
+.item.lead p{-webkit-line-clamp:6;font-size:14.5px}
+@media (max-width:620px){.item.lead{grid-column:auto;flex-direction:column}.item.lead .img{aspect-ratio:16/9;min-height:0}}
+.empty{padding:40px 16px;text-align:center;color:var(--ink-3);grid-column:1/-1}
+.empty b{display:block;color:var(--ink-2);font-size:15px;margin-bottom:4px}
+
+/* events */
+.evfilters{display:flex;gap:6px;flex-wrap:wrap}
+.evchip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 11px;cursor:pointer;font-size:12.5px;display:inline-flex;align-items:center;gap:6px}
+.evchip i{width:8px;height:8px;border-radius:50%}
+.evchip[aria-pressed="true"]{border-color:var(--ink);font-weight:700;background:var(--surface-2)}
+.events{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding:16px}
+.ev{all:unset;box-sizing:border-box;display:grid;grid-template-columns:112px 1fr;cursor:pointer;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface);min-width:0}
+.ev:hover{border-color:var(--ink-3)}
+.ev:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ev .img{background:var(--surface-2) center/cover no-repeat;position:relative;min-height:128px}
+.ev .date{position:absolute;left:8px;top:8px;background:var(--surface);border-radius:7px;padding:3px 7px;text-align:center;line-height:1.1;box-shadow:var(--shadow)}
+.ev .date b{display:block;font-family:var(--f-data);font-size:19px}
+.ev .date small{font-size:10.5px;color:var(--ink-3)}
+.ev .body{padding:10px 12px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.ev h3{margin:0;font-size:14.5px;line-height:1.45;font-weight:700}
+.ev p{margin:0;font-size:12.5px;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ev .where{font-size:11.5px;color:var(--ink-3)}
+.ev.alert{border-color:color-mix(in srgb,var(--red) 50%,var(--line));background:color-mix(in srgb,var(--red) 5%,var(--surface))}
+.ev .state{font-family:var(--f-data);font-size:10.5px;font-weight:600;padding:0 5px;border-radius:3px;border:1px solid currentColor}
+
+/* modal */
+dialog{border:0;padding:0;border-radius:14px;width:min(760px,calc(100vw - 24px));max-height:calc(100dvh - 40px);background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(8,14,22,.55)}
+.dlg-img{aspect-ratio:16/8;max-width:100%;background:var(--surface-2) center/cover no-repeat}
+.dlg-b{padding:20px 24px 26px}
+.dlg-b h2{font-family:var(--f-display);font-weight:900;font-size:24px;line-height:1.4;margin:8px 0 10px;text-wrap:balance}
+.dlg-b .lede{font-size:15.5px;color:var(--ink);font-weight:500;border-left:3px solid var(--accent);padding-left:12px;margin:0 0 14px}
+.dlg-b .txt p{margin:0 0 12px;font-size:15px;line-height:1.85;color:var(--ink-2)}
+.dlg-b .orig{font-size:12.5px;color:var(--ink-3);border-top:1px solid var(--line);padding-top:12px;margin-top:6px}
+.dlg-b .orig i{font-style:normal;color:var(--ink-2)}
+@media (max-width:640px){
+  .bar .wrap{gap:8px 12px;padding-block:8px}
+  .brand small{display:none}
+  .status{order:3;width:100%;font-size:11.5px}
+  .seg button{padding:7px 16px}
+  .seg.sm button{padding:6px 13px}
+  .brief{font-size:13px;padding-block:10px 0}
+  main{gap:14px;padding-block:10px 28px}
+  .card-h{padding:12px 12px 10px}
+  .card-h h2{font-size:17px}
+  .card-h .sub{display:none}
+  .map-box{min-height:0;padding:4px 4px 8px}
+  .map-box{flex-direction:column}
+  #map{min-height:0;height:auto;flex:none}
+  .tip.sheet{position:relative;margin:4px 4px 0;max-height:none;box-shadow:none}
+  .status{flex-wrap:nowrap;align-items:flex-start}
+  .status .dot{margin-top:5px}
+  .legend{padding:0 12px 10px;font-size:11.5px;gap:8px}
+  .mw{padding:12px}
+  .mw-now .t{font-size:44px}
+  .facts{grid-template-columns:repeat(2,1fr)}
+  .cities{display:grid;grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:142px;overflow-x:auto;scroll-snap-type:x mandatory;padding:12px;-webkit-overflow-scrolling:touch}
+  .city-t{scroll-snap-align:start}
+  .tabs{width:100%}
+  .tab{flex:1;padding:8px 6px;text-align:center}
+  .datebar{flex-wrap:nowrap;overflow-x:auto;padding:10px 12px;-webkit-overflow-scrolling:touch}
+  .datebar label{display:none}
+  .dchip,.datebar input[type=date]{flex:none}
+  .dchip{padding:5px 9px}
+  .news{padding:12px;gap:12px}
+  .item h3{font-size:16px}
+  .item.lead h3{font-size:19px}
+  .evfilters{flex-wrap:nowrap;overflow-x:auto;width:100%;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+  .evchip{flex:none;padding:6px 12px}
+  .events{grid-template-columns:1fr;padding:12px;gap:10px}
+  .ev{grid-template-columns:100px 1fr}
+  .ev .img{min-height:118px}
+  dialog{width:100vw;max-width:100vw;max-height:92dvh;margin:auto auto 0;border-radius:16px 16px 0 0}
+  .dlg-b{padding:16px 16px calc(24px + env(safe-area-inset-bottom,0px))}
+  .dlg-b h2{font-size:20px}
+  .dlg-b .txt p{font-size:15px}
+}
+.dlg-x{position:sticky;top:0;float:right;margin:10px 10px -46px 0;z-index:2;width:36px;height:36px;border-radius:50%;border:0;background:var(--surface);box-shadow:var(--shadow);cursor:pointer;font-size:20px;line-height:1}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--ink);border-radius:8px;padding:6px 12px;text-decoration:none;color:var(--ink);font-size:13.5px;font-weight:700;margin-top:10px}
+.btn:hover{background:var(--ink);color:var(--surface)}
+footer{color:var(--ink-3);font-size:12px;padding-block:0 30px;line-height:1.8}
+footer b{color:var(--ink-2)}
+
+/* jump nav */
+.jump{display:flex;gap:6px;flex-wrap:wrap;padding-block:6px 0;font-size:12.5px}
+.jump a{color:var(--ink-2);text-decoration:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 11px}
+.jump a:hover{border-color:var(--accent);color:var(--ink)}
+
+/* housing + flights shared */
+.ctl{display:flex;gap:8px 12px;flex-wrap:wrap;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.ctl .lab{font-size:12px;color:var(--ink-3)}
+.split{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:0;border-bottom:1px solid var(--line)}
+@media (max-width:900px){.split{grid-template-columns:1fr}}
+.split .mapwrap{padding:8px 10px;border-right:1px solid var(--line);min-width:0}
+@media (max-width:900px){.split .mapwrap{border-right:0;border-bottom:1px solid var(--line)}}
+.split svg{width:100%;height:auto;display:block}
+.side{padding:14px 16px;display:grid;gap:12px;align-content:start;min-width:0}
+.side h3{margin:0;font-family:var(--f-display);font-size:17px;font-weight:900;text-wrap:balance}
+.side h3 small{display:block;font-family:var(--f-data);font-weight:400;font-size:11px;color:var(--ink-3);letter-spacing:.04em}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.kv div{background:var(--surface-2);border-radius:8px;padding:7px 9px}
+.kv span{display:block;font-size:11px;color:var(--ink-3)}
+.kv b{font-family:var(--f-data);font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.kv b small{font-size:11px;font-weight:400;color:var(--ink-3)}
+.rank{display:grid;gap:2px}
+.rank button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;padding:6px 6px;border-radius:6px;cursor:pointer;font-size:13px}
+.rank button:hover,.rank button:focus-visible{background:var(--surface-2)}
+.rank button:focus-visible{outline:2px solid var(--accent)}
+.rank i{font-style:normal;font-family:var(--f-data);font-size:11px;color:var(--ink-3)}
+.rank b{font-family:var(--f-data);font-weight:600;font-variant-numeric:tabular-nums}
+.scale{display:flex;align-items:center;gap:8px;font-family:var(--f-data);font-size:11px;color:var(--ink-3)}
+.scale i{flex:1;height:8px;border-radius:4px}
+.note{font-size:12px;color:var(--ink-3);line-height:1.6;margin:0}
+#hmap .hz{stroke:var(--map-stroke);stroke-width:.7;cursor:pointer;transition:opacity .15s}
+#hmap .hz.sel{stroke:var(--ink);stroke-width:1.6}
+#hmap .hz:hover{stroke:var(--ink);stroke-width:1.2}
+#hmap .lbl{font-family:var(--f-data);font-size:9.5px;font-weight:600;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:2.5px;pointer-events:none}
+
+/* listings */
+.hlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;padding:16px}
+@media (max-width:620px){.hlist{grid-template-columns:1fr;padding:12px}}
+.hl{display:grid;grid-template-columns:104px 1fr;border:1px solid var(--line);border-radius:10px;overflow:hidden;text-decoration:none;color:var(--ink);background:var(--surface);min-width:0}
+.hl:hover{border-color:var(--ink-3)}
+.hl:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hl .img{background:var(--surface-2) center/cover no-repeat;min-height:112px;position:relative}
+.hl .img .ph{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:20px;color:color-mix(in srgb,var(--ink) 22%,transparent)}
+.hl .body{padding:9px 11px;display:grid;gap:3px;align-content:start;min-width:0}
+.hl .hp{font-family:var(--f-data);font-size:19px;font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums}
+.hl .hp small{font-size:11.5px;font-weight:400;color:var(--ink-3)}
+.hl .hs{font-family:var(--f-data);font-size:11.5px;color:var(--ink-2)}
+.hl p{margin:0;font-size:12px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.val{justify-self:start;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px}
+.val.good{color:var(--green);background:color-mix(in srgb,var(--green) 13%,transparent)}
+.val.mid{color:var(--ink-2);background:var(--surface-2)}
+.val.bad{color:var(--red);background:color-mix(in srgb,var(--red) 11%,transparent)}
+.more{display:flex;justify-content:center;padding:0 16px 16px}
+.more button{border:1px solid var(--line-2);background:var(--surface);border-radius:8px;padding:6px 16px;cursor:pointer;font-size:13px}
+.more button:hover{border-color:var(--ink)}
+
+/* flights */
+#fmap .land{fill:var(--map-land);stroke:var(--map-stroke);stroke-width:.6}
+#fmap .land.cn{fill:color-mix(in srgb,var(--red) 16%,var(--map-land))}
+#fmap .arc{fill:none;stroke:var(--ink-3);stroke-width:.8;opacity:.35}
+#fmap .arc.on{stroke:var(--accent);stroke-width:2;opacity:1}
+#fmap .dest{cursor:pointer}
+#fmap .dest circle{stroke:var(--surface);stroke-width:1.5}
+#fmap .dest text{font-family:var(--f-data);font-size:10.5px;font-weight:600;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+#fmap .home circle{fill:var(--ink);stroke:var(--accent);stroke-width:3}
+#fmap .home text{font-family:var(--f-display);font-size:13px;font-weight:900;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:3px}
+.ftable{overflow-x:auto}
+.frow{display:grid;grid-template-columns:minmax(120px,1.3fr) 92px minmax(96px,.9fr) minmax(150px,1.6fr) 78px;gap:10px;align-items:center;padding:9px 16px;border-bottom:1px dashed var(--line);font-size:13.5px;min-width:620px;cursor:pointer}
+.frow:hover,.frow.on{background:var(--surface-2)}
+.frow.hd{cursor:default;font-size:11.5px;color:var(--ink-3);background:transparent;border-bottom:1px solid var(--line);padding-block:7px}
+.frow .c b{font-weight:700}
+.frow .c small{display:block;font-size:11px;color:var(--ink-3)}
+.frow .p{font-family:var(--f-data);font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
+.frow .d{font-family:var(--f-data);font-size:12.5px}
+.frow .a{font-size:12px;color:var(--ink-2)}
+.frow a{font-size:12.5px;font-weight:700;color:var(--ink);text-decoration:none;border:1px solid var(--line-2);border-radius:7px;padding:3px 8px;text-align:center}
+.frow a:hover{background:var(--ink);color:var(--surface)}
+.tier{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:0}
+/* clubs + street dance */
+.ev .gen{display:flex;gap:4px;flex-wrap:wrap}
+.ev .gen span{font-size:10.5px;border:1px solid var(--line-2);border-radius:4px;padding:0 5px;color:var(--ink-2)}
+.ev .orig{font-size:11px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev.funk{border-color:color-mix(in srgb,var(--accent) 60%,var(--line));background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
+.ev.lock{border-color:color-mix(in srgb,var(--violet) 55%,var(--line));background:color-mix(in srgb,var(--violet) 6%,var(--surface))}
+.flag{font-size:10.5px;font-weight:800;letter-spacing:.06em;border-radius:3px;padding:0 5px;color:var(--accent-ink);background:var(--accent)}
+.flag.v{color:#fff;background:var(--violet)}
+.hint{padding:10px 16px 0;font-size:12.5px;color:var(--ink-2)}
+.src{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;color:var(--ink-2)}
+.src i{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:4px;font-style:normal;font-size:9.5px;font-weight:800;color:#fff}
+.cmp{font-size:11px;color:var(--ink-2);display:flex;gap:6px;flex-wrap:wrap}
+.cmp a{color:inherit}
+</style>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="brand">
+      <div class="badge" aria-hidden="true">意</div>
+      <div><h1>意欧晨报</h1><small>Milano · Italia · Europa</small></div>
+    </div>
+    <div class="status" id="status"><span class="dot" id="liveDot"></span><span id="statusText">正在连接数据…</span></div>
+    <div class="seg" role="group" aria-label="地区切换">
+      <button id="sc-italy" aria-pressed="true" data-scope="italy">意大利</button>
+      <button id="sc-europe" aria-pressed="false" data-scope="europe">欧洲</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap brief" id="brief" hidden><b>今日</b><span id="briefText"></span></div>
+<nav class="wrap jump" aria-label="页面导航"><a href="#newsCard">重点新闻</a><a href="#eventsCard">米兰活动</a><a href="#clubsCard">夜店</a><a href="#danceCard">街舞</a><a href="#housingCard">米兰房价</a><a href="#flightsCard">特价机票</a></nav>
+
+<main class="wrap">
+  <section class="row1">
+    <div class="card mapcard">
+      <div class="card-h">
+        <h2 id="mapTitle">意大利地图</h2>
+        <span class="sub" id="mapSub">悬停查看各地天气与新闻</span>
+        <span class="grow"></span>
+        <div class="seg sm" role="group" aria-label="地图图层">
+          <button id="ml-weather" aria-pressed="true" data-layer="weather">天气</button>
+          <button id="ml-news" aria-pressed="false" data-layer="news">新闻</button>
+        </div>
+      </div>
+      <div class="map-box" id="mapBox">
+        <svg id="map" viewBox="0 0 800 640" preserveAspectRatio="xMidYMid meet" role="img" aria-label="互动地图"></svg>
+        <div class="tip" id="tip" hidden></div>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+
+    <div class="card" id="milanCard">
+      <div class="card-h">
+        <h2>米兰天气</h2><span class="sub" id="mwSub">Milano</span><span class="grow"></span>
+      </div>
+      <div class="mw" id="mw"><div class="empty"><b>天气数据加载中</b>每天 07:00 更新</div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><h2 id="wxTitle">意大利主要城市天气</h2><span class="sub" id="wxSub"></span></div>
+    <div class="cities" id="cities"></div>
+  </section>
+
+  <section class="card" id="newsCard">
+    <div class="card-h">
+      <h2>重点新闻</h2><span class="sub" id="newsSub"></span><span class="grow"></span>
+      <span id="regionFilter"></span>
+      <div class="tabs" role="tablist" aria-label="新闻分类">
+        <button class="tab" role="tab" id="tab-headline" data-cat="headline" aria-selected="true">头条</button>
+        <button class="tab" role="tab" id="tab-hot" data-cat="hot" aria-selected="false">热点</button>
+        <button class="tab" role="tab" id="tab-china" data-cat="china" aria-selected="false">涉华报道</button>
+      </div>
+    </div>
+    <div class="datebar">
+      <label for="dateInput">日期</label>
+      <span id="dateChips" style="display:contents"></span>
+      <input type="date" id="dateInput" aria-label="选择日期">
+    </div>
+    <div class="news" id="news"></div>
+  </section>
+
+  <section class="card" id="eventsCard">
+    <div class="card-h">
+      <h2>米兰近期活动</h2><span class="sub">娱乐 · 艺术 · 文化 · 活动 · 罢工 · 游行</span><span class="grow"></span>
+      <div class="evfilters" id="evFilters"></div>
+    </div>
+    <div class="events" id="events"></div>
+  </section>
+
+  <section class="card" id="clubsCard">
+    <div class="card-h">
+      <h2>米兰夜店</h2><span class="sub" id="cSub">Club · 未来 3 周 · Funk / Old school 优先</span><span class="grow"></span>
+      <div class="evfilters" id="cFilters" role="group" aria-label="音乐风格"></div>
+    </div>
+    <div class="events" id="clubs"></div>
+  </section>
+
+  <section class="card" id="danceCard">
+    <div class="card-h">
+      <h2>街舞赛事</h2><span class="sub">Funk · Locking · 比赛 / 公开课 / 活动</span><span class="grow"></span>
+      <div class="seg sm" role="group" aria-label="地区">
+        <button id="ds-milan" data-dscope="milan" aria-pressed="true">米兰</button>
+        <button id="ds-italy" data-dscope="italy" aria-pressed="false">意大利</button>
+        <button id="ds-europe" data-dscope="europe" aria-pressed="false">欧洲</button>
+      </div>
+    </div>
+    <div class="ctl"><div class="evfilters" id="dFilters" role="group" aria-label="活动类型"></div></div>
+    <p class="hint" id="dHint" hidden></p>
+    <div class="events" id="dance"></div>
+  </section>
+
+  <section class="card" id="housingCard">
+    <div class="card-h">
+      <h2>米兰房价</h2><span class="sub" id="hSub">租房 · 买房 · 住房 · 门店</span>
+    </div>
+    <div class="ctl">
+      <div class="seg sm" role="group" aria-label="租或买">
+        <button id="hd-rent" data-hdeal="rent" aria-pressed="true">租房</button>
+        <button id="hd-buy" data-hdeal="buy" aria-pressed="false">买房</button>
+      </div>
+      <div class="seg sm" role="group" aria-label="物业类别">
+        <button id="hk-home" data-hkind="home" aria-pressed="true">住房</button>
+        <button id="hk-shop" data-hkind="shop" aria-pressed="false">门店</button>
+      </div>
+      <div class="evfilters" id="hTypes" role="group" aria-label="户型"></div>
+      <span id="hZoneChip"></span>
+    </div>
+    <div class="split">
+      <div class="mapwrap"><svg id="hmap" viewBox="0 0 600 560" role="img" aria-label="米兰街区房价地图"></svg></div>
+      <div class="side" id="hSide"><div class="empty"><b>房价数据加载中</b>每天 07:00 更新</div></div>
+    </div>
+    <div class="hlist" id="hList"></div>
+    <div class="more" id="hMore" hidden><button id="hMoreBtn">显示更多</button></div>
+  </section>
+
+  <section class="card" id="flightsCard">
+    <div class="card-h">
+      <h2>米兰出发特价机票</h2><span class="sub" id="fSub">未来 30 天 · 单程最低价</span><span class="grow"></span>
+      <div class="seg sm" role="group" aria-label="目的地区域">
+        <button id="fr-europe" data-freg="europe" aria-pressed="true">欧洲</button>
+        <button id="fr-china" data-freg="china" aria-pressed="false">中国</button>
+      </div>
+    </div>
+    <div class="split">
+      <div class="mapwrap"><svg id="fmap" viewBox="0 0 800 560" role="img" aria-label="机票价格地图"></svg></div>
+      <div class="side" id="fSide"><div class="empty"><b>机票数据加载中</b>每天 07:00 更新</div></div>
+    </div>
+    <div class="ftable" id="fList"></div>
+    <div class="more" id="fMore" hidden><button id="fMoreBtn">显示全部</button></div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <b>数据来源</b>：ANSA、Corriere della Sera、la Repubblica、Il Sole 24 Ore、Il Giorno、BBC News、Euronews、DW、The Guardian、France 24、South China Morning Post、Google News 聚合、MilanoToday、意大利交通部罢工公告、Open-Meteo 天气。<br>
+  新闻详情为中文编译摘要，版权归原媒体所有，完整内容请点击“阅读原文”。每天 07:00（米兰时间）自动更新，页面实时同步最新数据。
+</footer>
+
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <button class="dlg-x" id="dlgX" aria-label="关闭">×</button>
+  <div id="dlgBody"></div>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const TZ = "Europe/Rome";
+
+/* ---------- state ---------- */
+const S = { scope:"italy", layer:"weather", cat:"headline", date:null, region:null, mwView:"day", evCat:"全部",
+  status:null, weather:null, news:[], events:[], live:false, geo:{} };
+try { const sv = JSON.parse(localStorage.getItem("yiou-prefs")||"{}"); if (sv.scope) S.scope = sv.scope; if (sv.layer) S.layer = sv.layer; } catch(e) {}
+const savePrefs = () => { try { localStorage.setItem("yiou-prefs", JSON.stringify({scope:S.scope, layer:S.layer})); } catch(e) {} };
+
+/* ---------- names ---------- */
+const IT_ZH = {"Piemonte":"皮埃蒙特","Valle d'Aosta/Vallée d'Aoste":"瓦莱达奥斯塔","Lombardia":"伦巴第","Trentino-Alto Adige/Südtirol":"特伦蒂诺-上阿迪杰","Veneto":"威尼托","Friuli-Venezia Giulia":"弗留利-威尼斯朱利亚","Liguria":"利古里亚","Emilia-Romagna":"艾米利亚-罗马涅","Toscana":"托斯卡纳","Umbria":"翁布里亚","Marche":"马尔凯","Lazio":"拉齐奥","Abruzzo":"阿布鲁佐","Molise":"莫利塞","Campania":"坎帕尼亚","Puglia":"普利亚","Basilicata":"巴西利卡塔","Calabria":"卡拉布里亚","Sicilia":"西西里","Sardegna":"撒丁"};
+const EU_ZH = {"Albania":"阿尔巴尼亚","Andorra":"安道尔","Austria":"奥地利","Belarus":"白俄罗斯","Belgium":"比利时","Bosnia and Herz.":"波黑","Bulgaria":"保加利亚","Croatia":"克罗地亚","Cyprus":"塞浦路斯","Czechia":"捷克","Denmark":"丹麦","Estonia":"爱沙尼亚","Finland":"芬兰","France":"法国","Germany":"德国","Greece":"希腊","Hungary":"匈牙利","Iceland":"冰岛","Ireland":"爱尔兰","Italy":"意大利","Kosovo":"科索沃","Latvia":"拉脱维亚","Liechtenstein":"列支敦士登","Lithuania":"立陶宛","Luxembourg":"卢森堡","Macedonia":"北马其顿","Malta":"马耳他","Moldova":"摩尔多瓦","Monaco":"摩纳哥","Montenegro":"黑山","Netherlands":"荷兰","Norway":"挪威","Poland":"波兰","Portugal":"葡萄牙","Romania":"罗马尼亚","Russia":"俄罗斯","San Marino":"圣马力诺","Serbia":"塞尔维亚","Slovakia":"斯洛伐克","Slovenia":"斯洛文尼亚","Spain":"西班牙","Sweden":"瑞典","Switzerland":"瑞士","Turkey":"土耳其","Ukraine":"乌克兰","United Kingdom":"英国","Vatican":"梵蒂冈","Georgia":"格鲁吉亚","Armenia":"亚美尼亚","Azerbaijan":"阿塞拜疆","Morocco":"摩洛哥","Algeria":"阿尔及利亚","Tunisia":"突尼斯","Syria":"叙利亚","Iraq":"伊拉克","Iran":"伊朗","Lebanon":"黎巴嫩","Greenland":"格陵兰","N. Cyprus":"北塞浦路斯","Faeroe Is.":"法罗群岛"};
+const zhName = n => IT_ZH[n] || EU_ZH[n] || n;
+const CAT_ZH = {headline:"头条", hot:"热点", china:"涉华"};
+
+/* ---------- weather codes + icons ---------- */
+const WMO = c => c===0?["晴","sun"]:c<=2?["多云间晴","partly"]:c===3?["阴","cloud"]:c<=48?["雾","fog"]:c<=57?["毛毛雨","drizzle"]:c<=67?["雨","rain"]:c<=77?["雪","snow"]:c<=82?["阵雨","rain"]:c<=86?["阵雪","snow"]:["雷雨","storm"];
+const wdesc = c => WMO(c)[0];
+function icon(c){
+  const k = WMO(c)[1];
+  const sun = `<circle cx="16" cy="16" r="6" fill="var(--accent)"/><g stroke="var(--accent)" stroke-width="2" stroke-linecap="round">${[0,45,90,135,180,225,270,315].map(a=>{const r=a*Math.PI/180;return `<line x1="${16+Math.cos(r)*9}" y1="${16+Math.sin(r)*9}" x2="${16+Math.cos(r)*12}" y2="${16+Math.sin(r)*12}"/>`}).join("")}</g>`;
+  const cloud = (x=0,y=0,f="var(--ink-3)") => `<path transform="translate(${x} ${y})" d="M9 24h14a5 5 0 0 0 0-10 7 7 0 0 0-13.4 1.6A4.3 4.3 0 0 0 9 24z" fill="${f}"/>`;
+  const drops = n => `<g stroke="var(--blue)" stroke-width="2" stroke-linecap="round">${[11,16,21].slice(0,n).map(x=>`<line x1="${x}" y1="26" x2="${x-1.5}" y2="30"/>`).join("")}</g>`;
+  let g;
+  switch(k){
+    case "sun": g = sun; break;
+    case "partly": g = `<g transform="translate(-4 -4) scale(.8)">${sun}</g>` + cloud(2,2); break;
+    case "cloud": g = cloud(0,0); break;
+    case "fog": g = cloud(0,-3) + `<g stroke="var(--ink-3)" stroke-width="2" stroke-linecap="round"><line x1="7" y1="26" x2="25" y2="26"/><line x1="10" y1="30" x2="22" y2="30"/></g>`; break;
+    case "drizzle": g = cloud(0,-3) + drops(2); break;
+    case "rain": g = cloud(0,-3) + drops(3); break;
+    case "snow": g = cloud(0,-3) + `<g fill="var(--blue)"><circle cx="11" cy="28" r="1.6"/><circle cx="16" cy="30" r="1.6"/><circle cx="21" cy="28" r="1.6"/></g>`; break;
+    default: g = cloud(0,-3,"var(--ink-2)") + `<path d="M17 21l-4 6h4l-2 5 6-7h-4l2-4z" fill="var(--accent)"/>`;
+  }
+  return `<svg viewBox="0 0 32 32" aria-hidden="true">${g}</svg>`;
+}
+
+/* ---------- time helpers ---------- */
+const romeDate = (d=new Date()) => new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit"}).format(d);
+const fmtDT = iso => new Intl.DateTimeFormat("zh-CN",{timeZone:TZ,month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date(iso));
+const fmtMD = ymd => { const [y,m,d] = ymd.split("-").map(Number); return `${m}月${d}日`; };
+const WK = ["周日","周一","周二","周三","周四","周五","周六"];
+const wk = ymd => WK[new Date(ymd+"T12:00:00Z").getUTCDay()];
+const addDays = (ymd,n) => { const d = new Date(ymd+"T12:00:00Z"); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); };
+const ago = iso => { const m = Math.round((Date.now()-new Date(iso))/60000); if (m<1) return "刚刚"; if (m<60) return m+" 分钟前"; const h=Math.floor(m/60); if (h<24) return h+" 小时前"; return Math.floor(h/24)+" 天前"; };
+
+/* ---------- status bar ---------- */
+function renderStatus(){
+  const st = S.status;
+  $("#liveDot").className = "dot" + (S.live ? " live" : "");
+  if (!st) { $("#statusText").textContent = S.live ? "已连接，等待首次数据" : "正在连接数据…"; return; }
+  $("#statusText").innerHTML = `更新于 <span class="num">${esc(fmtDT(st.updatedAt))}</span>（${esc(ago(st.updatedAt))}）· ${esc(st.schedule_zh||"每天 07:00 更新")}`;
+  if (st.brief_zh) { $("#brief").hidden = false; $("#briefText").textContent = st.brief_zh; }
+}
+
+/* ---------- scope ---------- */
+function setScope(sc){
+  S.scope = sc; S.region = null; savePrefs();
+  document.querySelectorAll("[data-scope]").forEach(b => b.setAttribute("aria-pressed", b.dataset.scope===sc));
+  $("#mapTitle").textContent = sc==="italy" ? "意大利地图" : "欧洲地图";
+  $("#wxTitle").textContent = sc==="italy" ? "意大利主要城市天气" : "欧洲主要城市天气";
+  drawMap(); renderCities(); renderNews();
+}
+document.querySelectorAll("[data-scope]").forEach(b => b.onclick = () => setScope(b.dataset.scope));
+document.querySelectorAll("[data-layer]").forEach(b => b.onclick = () => { S.layer = b.dataset.layer; savePrefs();
+  document.querySelectorAll("[data-layer]").forEach(x => x.setAttribute("aria-pressed", x.dataset.layer===S.layer)); drawMap(); });
+
+/* ---------- map ---------- */
+const TOUCH = matchMedia("(hover: none), (pointer: coarse)").matches;
+const svg = d3.select("#map"), W = 800; let H = 640;
+let proj, path;
+async function loadGeo(){
+  const [it, eu] = await Promise.all([fetch("geo/italy.json").then(r=>r.json()), fetch("geo/europe.json").then(r=>r.json())]);
+  S.geo.italy = topojson.feature(it, it.objects.limits_IT_regions).features;
+  S.geo.europe = topojson.feature(eu, eu.objects.countries).features;
+  drawMap();
+}
+const cityList = () => (S.weather && S.weather[S.scope]) || [];
+function newsForMap(){ return S.news.filter(n => n.scope===S.scope || (S.scope==="italy" && n.region && IT_ZH[n.region])); }
+
+function drawMap(){
+  const feats = S.geo[S.scope]; if (!feats) return;
+  hideTip(); svg.on("click", null);
+  svg.selectAll("*").remove();
+  const isIt = S.scope==="italy";
+  H = isIt && matchMedia("(max-width:640px)").matches ? 900 : 640;
+  svg.attr("viewBox", `0 0 ${W} ${H}`).style("aspect-ratio", `${W}/${H}`);
+  if (isIt) { proj = d3.geoConicConformal().parallels([38,46]).rotate([-12.5,0]); proj.fitExtent([[20,10],[W-20,H-10]], {type:"FeatureCollection",features:feats}); }
+  else { proj = d3.geoConicConformal().parallels([40,62]).rotate([-12,0]);
+    proj.fitExtent([[10,10],[W-10,H-10]], {type:"Feature",geometry:{type:"MultiPoint",coordinates:[[-11,35],[34,35],[-10,64],[38,64],[12,71]]}}); }
+  path = d3.geoPath(proj);
+  svg.append("defs").append("clipPath").attr("id","mclip").append("rect").attr("width",W).attr("height",H);
+  const g = svg.append("g").attr("clip-path","url(#mclip)");
+  const nm = newsForMap();
+  const count = {}; nm.forEach(n => { if (n.region) count[n.region] = (count[n.region]||0)+1; });
+  const cityByArea = {}; cityList().forEach(c => { (cityByArea[c.area] ||= []).push(c); });
+  g.selectAll("path.land").data(feats).join("path")
+    .attr("class", d => { const n = d.properties.name; let c = "land";
+      if (S.layer==="news" && count[n]) c += count[n]>1 ? " has2" : " has";
+      if (S.layer==="weather" && cityByArea[n]) c += " focus";
+      if (S.region===n) c += " sel"; return c; })
+    .attr("d", path).attr("tabindex", d => (count[d.properties.name]||cityByArea[d.properties.name]) ? 0 : null)
+    .on("mousemove", (ev,d) => { if (!TOUCH) showTip(ev, d.properties.name); })
+    .on("mouseenter", function(){ if (!TOUCH) d3.select(this).classed("hover",true).raise(); })
+    .on("mouseleave", function(){ if (!TOUCH) { d3.select(this).classed("hover",false); hideTip(); } })
+    .on("focus", function(ev,d){ if (TOUCH) return; const b = this.getBBox(); showTipAt(b.x+b.width/2, b.y+b.height/2, d.properties.name); })
+    .on("blur", () => { if (!TOUCH) hideTip(); })
+    .on("click", function(ev,d){ const n = d.properties.name;
+      if (TOUCH) { ev.stopPropagation(); tapArea(this, n); return; }
+      if (!count[n]) return; filterRegion(n); });
+
+  if (S.layer==="weather") {
+    const cg = g.append("g");
+    cityList().forEach(c => {
+      const [x,y] = proj([c.lon,c.lat]); if (x<0||x>W||y<0||y>H) return;
+      const gg = cg.append("g").attr("class","city").attr("transform",`translate(${x},${y})`)
+        .on("mousemove", ev => { if (!TOUCH) showTip(ev, c.area, c); }).on("mouseleave", () => { if (!TOUCH) hideTip(); })
+        .on("click", ev => { if (!TOUCH) return; ev.stopPropagation(); tapArea(null, c.area, c); });
+      gg.append("circle").attr("r",14).style("fill","transparent").style("stroke","none");
+      gg.append("circle").attr("r",3.5);
+      gg.append("text").attr("class","t").attr("x",6).attr("y",-4).text(`${c.t}°`);
+      gg.append("text").attr("x",6).attr("y",9).text(c.zh);
+    });
+  } else {
+    const pg = g.append("g"), seen = {};
+    nm.forEach(n => {
+      if (n.lat==null || n.lon==null) return;
+      const key = n.region || (n.lat+","+n.lon); if (seen[key]) { seen[key].n++; seen[key].t.text(seen[key].n); return; }
+      const [x,y] = proj([n.lon,n.lat]); if (x<0||x>W||y<0||y>H) return;
+      const gg = pg.append("g").attr("class","pin").attr("transform",`translate(${x},${y})`)
+        .on("mousemove", ev => { if (!TOUCH) showTip(ev, n.region); }).on("mouseleave", () => { if (!TOUCH) hideTip(); })
+        .on("click", ev => { if (TOUCH && n.region) { ev.stopPropagation(); tapArea(null, n.region); } else openNews(n); });
+      gg.append("circle").attr("r",9);
+      const t = gg.append("text").attr("text-anchor","middle").attr("dy","0.35em").text(1);
+      seen[key] = {n:1, t};
+    });
+  }
+  $("#legend").innerHTML = S.layer==="weather"
+    ? `<span><i style="background:color-mix(in srgb,var(--navy) 22%,var(--map-land))"></i>有天气观测城市的${isIt?"大区":"国家"}</span><span>数字为当前气温 °C</span>`
+    : `<span><i style="background:color-mix(in srgb,var(--map-hot) 55%,var(--map-land))"></i>1 条新闻</span><span><i style="background:var(--map-hot)"></i>多条新闻</span><span>${TOUCH?"点击地区查看新闻":"点击地区可筛选下方新闻"}</span>`;
+  $("#mapSub").textContent = (TOUCH ? "点击" : "悬停") + (isIt ? "查看各大区天气与新闻" : "查看各国天气与新闻");
+  svg.on("click", () => { if (TOUCH) { hideTip(); svg.selectAll(".land.hover").classed("hover", false); } });
+}
+
+function filterRegion(n){ S.region = S.region===n ? null : n; hideTip(); drawMap(); renderNews(); $("#newsCard").scrollIntoView({behavior:"smooth",block:"start"}); }
+function tapArea(el, area, city){
+  svg.selectAll(".land.hover").classed("hover", false);
+  const node = el || svg.selectAll(".land").filter(d => d.properties.name===area).node();
+  if (node) d3.select(node).classed("hover", true).raise();
+  const tip = $("#tip"); tip.classList.add("sheet");
+  tip.innerHTML = `<button class="x" data-act="close" aria-label="关闭">×</button>` + tipHTML(area, city, true); tip.hidden = false; tip.scrollTop = 0;
+}
+$("#tip").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.act === "close") { hideTip(); svg.selectAll(".land.hover").classed("hover", false); }
+  else if (b.dataset.act === "filter") filterRegion(b.dataset.area);
+  else if (b.dataset.id) openNews(S.news.find(n => n.id === b.dataset.id));
+});
+function tipHTML(area, city, interactive){
+  const cities = city ? [city] : cityList().filter(c => c.area===area);
+  const nm = newsForMap().filter(n => n.region===area);
+  let h = `<h4>${esc(zhName(area))}<small>${esc(area)}</small></h4>`;
+  cities.slice(0,2).forEach(c => {
+    h += `<div class="w">${icon(c.code)}<b>${c.t}°</b><span>${esc(c.zh)} · ${esc(wdesc(c.code))}<br><span class="mini"><span>湿度 ${c.hum}%</span><span>风 ${c.wind} km/h</span></span></span></div>`;
+    if (c.days) h += `<div class="mini">${c.days.map((d,i)=>`<span>${i?wk(d.d):"今天"} ${d.min}°/${d.max}°</span>`).join("")}</div>`;
+  });
+  if (!cities.length) h += `<div class="mini">该地区暂无天气观测城市</div>`;
+  if (nm.length && interactive) {
+    h += `<div style="margin-top:6px">${nm.map(n=>`<button class="tn" data-id="${esc(n.id)}"><small>${esc(CAT_ZH[n.cat])} · ${esc(n.source)}</small>${esc(n.title_zh)}</button>`).join("")}</div>`;
+    if (nm.length > 1 && S.scope===nm[0].scope) h += `<button class="tf" data-act="filter" data-area="${esc(area)}">在下方只看${esc(zhName(area))}的新闻</button>`;
+  } else if (nm.length) h += `<ul>${nm.slice(0,3).map(n=>`<li>${esc(n.title_zh)}</li>`).join("")}</ul>`;
+  else h += `<div class="mini" style="margin-top:4px">当日暂无该地区新闻</div>`;
+  return h;
+}
+function showTipAt(x, y, area, city){
+  $("#tip").classList.remove("sheet");
+  const tip = $("#tip"), box = $("#mapBox").getBoundingClientRect(), r = $("#map").getBoundingClientRect();
+  tip.innerHTML = tipHTML(area, city); tip.hidden = false;
+  const k = Math.min(r.width / W, r.height / H), ox = (r.width - W*k)/2, oy = (r.height - H*k)/2;
+  const px = (r.left - box.left) + ox + x * k, py = (r.top - box.top) + oy + y * k;
+  placeTip(px, py);
+}
+function showTip(ev, area, city){
+  $("#tip").classList.remove("sheet");
+  const tip = $("#tip"), box = $("#mapBox").getBoundingClientRect();
+  tip.innerHTML = tipHTML(area, city); tip.hidden = false;
+  placeTip(ev.clientX - box.left, ev.clientY - box.top);
+}
+function placeTip(x, y){
+  const tip = $("#tip"), box = $("#mapBox"), tw = tip.offsetWidth, th = tip.offsetHeight;
+  let lx = x + 16, ly = y + 16;
+  if (lx + tw > box.clientWidth - 6) lx = Math.max(6, x - tw - 16);
+  if (ly + th > box.clientHeight - 6) ly = Math.max(6, y - th - 16);
+  tip.style.left = lx + "px"; tip.style.top = ly + "px";
+}
+function hideTip(){ $("#tip").hidden = true; }
+
+/* ---------- Milan weather ---------- */
+function renderMilan(){
+  const m = S.weather && S.weather.milan; if (!m) return;
+  const today = m.days[0];
+  let h = `<div class="mw-sec" style="border:0;padding:0">今日</div><div class="mw-now">${icon(m.code)}<div><div class="t">${m.t}°</div></div><div><div class="d">${esc(wdesc(m.code))}</div><div class="f">体感 ${m.feels}° · 今日 ${today.min}° / ${today.max}°</div><div class="f">降水概率 ${today.pp ?? "–"}%</div></div></div>
+    <div class="facts"><div><span>湿度</span><b>${m.hum}%</b></div><div><span>风速</span><b>${m.wind}<small> km/h</small></b></div><div><span>气压</span><b>${m.pres}</b></div><div><span>紫外线</span><b>${today.uv ?? "–"}</b></div></div>`;
+  {
+    const nowH = new Intl.DateTimeFormat("en-GB",{timeZone:TZ,hour:"2-digit",hour12:false}).format(new Date());
+    const todayStr = romeDate();
+    let start = m.hours.findIndex(x => x.t.slice(0,10)===todayStr && +x.t.slice(11,13) >= +nowH); if (start<0) start = 0;
+    const hrs = m.hours.slice(start, start+24);
+    const cw = 44, w = hrs.length*cw, ht = 150;
+    const ts = hrs.map(x=>x.temp), lo = Math.min(...ts)-1, hi = Math.max(...ts)+1;
+    const y = t => 62 - (t-lo)/(hi-lo||1)*40;
+    const pts = hrs.map((x,i)=>[i*cw+cw/2, y(x.temp)]);
+    const line = d3.line().curve(d3.curveMonotoneX)(pts), area = d3.area().curve(d3.curveMonotoneX).x(d=>d[0]).y0(70).y1(d=>d[1])(pts);
+    h += `<div class="hours"><svg width="${w}" height="${ht}" viewBox="0 0 ${w} ${ht}" role="img" aria-label="未来24小时气温">
+      <path d="${area}" fill="color-mix(in srgb,var(--accent) 22%,transparent)"/><path d="${line}" fill="none" stroke="var(--accent)" stroke-width="2"/>
+      ${hrs.map((x,i)=>`<g transform="translate(${i*cw},0)"><circle cx="${cw/2}" cy="${y(x.temp)}" r="${i?2:4}" fill="${i?"var(--accent)":"var(--ink)"}"/><text x="${cw/2}" y="${y(x.temp)-8}" text-anchor="middle" style="font-weight:600;fill:var(--ink)">${x.temp}°</text>
+        <g transform="translate(${cw/2-11},76) scale(.6875)">${icon(x.code).replace('<svg viewBox="0 0 32 32" aria-hidden="true">','').replace('</svg>','')}</g>
+        <rect x="${cw/2-12}" y="${128-Math.round((x.pp||0)/100*14)}" width="24" height="${Math.round((x.pp||0)/100*14)}" rx="2" fill="color-mix(in srgb,var(--blue) 45%,transparent)"/>
+        <text x="${cw/2}" y="112" text-anchor="middle" style="fill:var(--blue)">${x.pp??0}%</text>
+        <text x="${cw/2}" y="144" text-anchor="middle">${i?x.t.slice(11,13)+"时":"现在"}</text></g>`).join("")}
+    </svg></div>
+    <div class="sun"><span>日出 ${today.sunrise}</span><span>降水 ${today.rain ?? 0} mm</span><span>日落 ${today.sunset}</span></div>`;
+  }
+  {
+    h += `<div class="mw-sec">未来 7 天</div>`;
+    const lo = Math.min(...m.days.map(d=>d.min)), hi = Math.max(...m.days.map(d=>d.max));
+    h += `<div class="days">${m.days.map((d,i)=>`<div class="day"><span>${i?wk(d.d):"今天"}<br><small class="num" style="color:var(--ink-3)">${d.d.slice(5).replace("-","/")}</small></span>${icon(d.code)}
+      <span class="lo">${d.min}°</span><div class="range" title="${esc(wdesc(d.code))}"><i style="left:${(d.min-lo)/(hi-lo||1)*100}%;right:${100-(d.max-lo)/(hi-lo||1)*100}%"></i></div><span class="hi">${d.max}°</span><span class="pp">${d.pp??0}%</span></div>`).join("")}</div>`;
+  }
+  $("#mw").innerHTML = h;
+  $("#mwSub").textContent = S.weather.updatedAt ? "Milano · 数据 " + fmtDT(S.weather.updatedAt) : "Milano";
+}
+
+/* ---------- city tiles ---------- */
+function renderCities(){
+  const list = cityList();
+  if (!list.length) { $("#cities").innerHTML = `<div class="empty"><b>暂无天气数据</b>每天 07:00 更新</div>`; return; }
+  $("#wxSub").textContent = `${list.length} 座城市 · 未来 3 天`;
+  $("#cities").innerHTML = list.map(c => `<div class="city-t" title="${esc(wdesc(c.code))}">
+    <div class="top"><div class="n">${esc(c.zh)}<small>${esc(c.name)}</small></div>${icon(c.code)}</div>
+    <div class="top"><span class="t">${c.t}°</span><span class="mm">${c.days[0].min}° / ${c.days[0].max}°<br>${esc(wdesc(c.code))}</span></div>
+    <div class="next">${c.days.slice(1).map(d=>`<span>${wk(d.d)}${icon(d.code)}${d.min}°/${d.max}°</span>`).join("")}</div></div>`).join("");
+}
+
+/* ---------- news ---------- */
+document.querySelectorAll("[data-cat]").forEach(b => b.onclick = () => { S.cat = b.dataset.cat;
+  document.querySelectorAll("[data-cat]").forEach(x => x.setAttribute("aria-selected", x.dataset.cat===S.cat)); renderNews(); });
+function newsSel(){
+  return S.news.filter(n => n.scope===S.scope && n.cat===S.cat && (!S.region || n.region===S.region)).sort((a,b)=>a.rank-b.rank);
+}
+function pillColor(n){ return n.cat==="china" ? "var(--red)" : n.cat==="hot" ? "var(--violet)" : "var(--navy)"; }
+function imgStyle(src){ return src ? `style="background-image:url('${src}')"` : ""; }
+function renderNews(){
+  ["headline","hot","china"].forEach(c => { const k = S.news.filter(n => n.scope===S.scope && n.cat===c).length;
+    const el = $("#tab-"+c); el.innerHTML = `${{headline:"头条",hot:"热点",china:"涉华报道"}[c]}<span class="c">${k}</span>`; });
+  $("#regionFilter").innerHTML = S.region ? `<button class="filter-chip" id="clearRegion" aria-label="清除地区筛选">${esc(zhName(S.region))} ×</button>` : "";
+  if (S.region) $("#clearRegion").onclick = () => { S.region = null; drawMap(); renderNews(); };
+  $("#newsSub").textContent = S.date ? `${fmtMD(S.date)} ${wk(S.date)} · ${S.scope==="italy"?(S.cat==="china"?"与意大利相关":"意大利"):(S.cat==="china"?"与欧洲相关":"欧洲")}` : "";
+  const list = newsSel();
+  if (!S.date) { $("#news").innerHTML = `<div class="empty"><b>新闻加载中</b>正在连接数据库</div>`; return; }
+  if (!list.length) { $("#news").innerHTML = `<div class="empty"><b>这一天没有这一类新闻</b>换个分类或日期看看。数据保留最近 7 天，每天 07:00 更新。</div>`; return; }
+  $("#news").innerHTML = list.map((n,i) => `<button class="item${i===0 && !S.region && list.length>2?" lead":""}" data-id="${esc(n.id)}">
+    <div class="img" ${imgStyle(n.image)}>${n.image?"":`<div class="ph">${esc(CAT_ZH[n.cat])}</div>`}</div>
+    <div class="body"><div class="meta"><span class="pill" style="background:${pillColor(n)}">${esc(CAT_ZH[n.cat])}</span>${n.place_zh?`<span class="pill place">${esc(n.place_zh)}</span>`:""}<span>${esc(n.source)}</span>${n.published?`<span class="num">${esc(fmtDT(n.published))}</span>`:""}</div>
+    <h3>${esc(n.title_zh)}</h3><p>${esc(n.summary_zh)}</p></div></button>`).join("");
+  $("#news").querySelectorAll(".item").forEach(b => b.onclick = () => openNews(S.news.find(n => n.id===b.dataset.id)));
+}
+function openNews(n){
+  if (!n) return;
+  $("#dlgBody").innerHTML = `${n.image?`<div class="dlg-img" ${imgStyle(n.image)}></div>`:""}<div class="dlg-b">
+    <div class="meta"><span class="pill" style="background:${pillColor(n)}">${esc(CAT_ZH[n.cat])}</span>${n.place_zh?`<span class="pill place">${esc(n.place_zh)}</span>`:""}<span>${esc(n.source)}</span>${n.published?`<span class="num">${esc(fmtDT(n.published))}</span>`:""}${(n.tags||[]).map(t=>`<span>#${esc(t)}</span>`).join("")}</div>
+    <h2 id="dlgTitle">${esc(n.title_zh)}</h2><p class="lede">${esc(n.summary_zh)}</p>
+    <div class="txt">${(n.body_zh||[]).map(p=>`<p>${esc(p)}</p>`).join("")}</div>
+    <div class="orig">原标题：<i>${esc(n.title_orig)}</i><br>以上为中文编译摘要，完整报道请阅读原文。<br>${n.url?`<a class="btn" href="${esc(n.url)}" target="_blank" rel="noopener">阅读原文 ↗</a>`:""}</div></div>`;
+  showDlg();
+}
+
+/* date selector: last 7 days */
+function renderDates(){
+  const today = S.status?.date || romeDate();
+  const avail = new Set(S.status?.dates || []);
+  const days = Array.from({length:7}, (_,i) => addDays(today, -i));
+  $("#dateChips").innerHTML = days.map((d,i) => `<button class="dchip" data-d="${d}" aria-pressed="${d===S.date}" ${avail.has(d)?"":"disabled title=\"当天无存档\""}>${i===0?"今天":i===1?"昨天":wk(d)}<small>${d.slice(5).replace("-","/")}</small></button>`).join("");
+  $("#dateChips").querySelectorAll(".dchip").forEach(b => b.onclick = () => setDate(b.dataset.d));
+  const inp = $("#dateInput"); inp.min = days[6]; inp.max = days[0]; inp.value = S.date || "";
+}
+$("#dateInput").onchange = e => { const v = e.target.value; if (v) setDate(v); };
+
+/* ---------- events ---------- */
+const EV_COLORS = {"娱乐":"var(--pink)","艺术":"var(--violet)","文化":"var(--teal)","活动":"var(--green)","罢工":"var(--red)","游行":"var(--accent)"};
+function renderEvFilters(){
+  const cats = ["全部","娱乐","艺术","文化","活动","罢工","游行"];
+  $("#evFilters").innerHTML = cats.map(c => { const k = c==="全部" ? S.events.length : S.events.filter(e=>e.cat===c).length;
+    return `<button class="evchip" data-ev="${c}" aria-pressed="${S.evCat===c}">${c!=="全部"?`<i style="background:${EV_COLORS[c]}"></i>`:""}${c} <span class="num" style="color:var(--ink-3);font-size:11px">${k}</span></button>`; }).join("");
+  $("#evFilters").querySelectorAll(".evchip").forEach(b => b.onclick = () => { S.evCat = b.dataset.ev; renderEvFilters(); renderEvents(); });
+}
+function evState(e){
+  const t = romeDate();
+  if (e.end && e.end < t) return ["已结束","var(--ink-3)"];
+  if (e.start <= t && (!e.end || e.end >= t)) return ["进行中","var(--green)"];
+  const d = Math.round((new Date(e.start+"T12:00:00Z") - new Date(t+"T12:00:00Z"))/864e5);
+  return [d===1?"明天":d+" 天后", d<=3?"var(--red)":"var(--ink-2)"];
+}
+function renderEvents(){
+  const t = romeDate();
+  let list = S.events.filter(e => S.evCat==="全部" || e.cat===S.evCat);
+  list.sort((a,b) => { const ae = a.end && a.end < t, be = b.end && b.end < t; if (ae!==be) return ae?1:-1; return (a.start||"").localeCompare(b.start||""); });
+  if (!list.length) { $("#events").innerHTML = `<div class="empty"><b>${S.events.length?"这一类暂时没有活动":"活动加载中"}</b>每天 07:00 更新</div>`; return; }
+  $("#events").innerHTML = list.map(e => { const [st, sc] = evState(e); const [y,m,d] = (e.start||"--").split("-");
+    return `<button class="ev${e.cat==="罢工"||e.cat==="游行"?" alert":""}" data-id="${esc(e.id)}">
+      <div class="img" ${imgStyle(e.image)}>${e.image?"":`<div class="ph" style="position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:30px;color:${EV_COLORS[e.cat]}">${esc(e.cat)}</div>`}
+        <div class="date"><b>${+d||""}</b><small>${+m?(+m)+"月":""}</small></div></div>
+      <div class="body"><div class="meta"><span class="pill" style="background:${EV_COLORS[e.cat]||"var(--navy)"};${e.cat==="游行"?"color:var(--accent-ink)":""}">${esc(e.cat)}</span><span class="state" style="color:${sc}">${st}</span></div>
+      <h3>${esc(e.title_zh)}</h3><p>${esc(e.summary_zh)}</p>
+      <div class="where">${esc(dateRange(e))}${e.venue_zh?" · "+esc(e.venue_zh):""}</div></div></button>`; }).join("");
+  $("#events").querySelectorAll(".ev").forEach(b => b.onclick = () => openEvent(S.events.find(e => e.id===b.dataset.id)));
+}
+const dateRange = e => !e.start ? "" : (!e.end ? `${fmtMD(e.start)} 起` : e.end===e.start ? `${fmtMD(e.start)} ${wk(e.start)}` : `${fmtMD(e.start)} – ${fmtMD(e.end)}`);
+function openEvent(e){
+  if (!e) return;
+  $("#dlgBody").innerHTML = `${e.image?`<div class="dlg-img" ${imgStyle(e.image)}></div>`:""}<div class="dlg-b">
+    <div class="meta"><span class="pill" style="background:${EV_COLORS[e.cat]};${e.cat==="游行"?"color:var(--accent-ink)":""}">${esc(e.cat)}</span><span>${esc(e.source)}</span></div>
+    <h2 id="dlgTitle">${esc(e.title_zh)}</h2>
+    <p class="lede">时间：${esc(dateRange(e))}${e.time_zh?" · "+esc(e.time_zh):""}${e.venue_zh?`<br>地点：${esc(e.venue_zh)}`:""}</p>
+    <div class="txt"><p>${esc(e.summary_zh)}</p>${(e.body_zh||[]).map(p=>`<p>${esc(p)}</p>`).join("")}</div>
+    <div class="orig">原标题：<i>${esc(e.title_orig)}</i><br>${e.url?`<a class="btn" href="${esc(e.url)}" target="_blank" rel="noopener">查看原始信息 ↗</a>`:""}</div></div>`;
+  showDlg();
+}
+
+/* ---------- club nights ---------- */
+const C = { cat:"all" };
+const isFunkClub = c => c.funk;
+const costTxt = v => { v = String(v||"").trim(); if (!v || v==="-") return "";
+  if (/^0([,.]0+)?\s*€?$/.test(v) || /free/i.test(v)) return " · 免费";
+  return " · " + (/[0-9]/.test(v) && !/€|eur/i.test(v) ? "€" + esc(v) : esc(v)); };
+function renderClubs(){
+  const L = S.clubs || [];
+  const cats = [["all","全部"],["funk","Funk · Old school"],["other","其他风格"]];
+  $("#cFilters").innerHTML = cats.map(([k,t]) => { const n = k==="all" ? L.length : L.filter(c => k==="funk" ? isFunkClub(c) : !isFunkClub(c)).length;
+    return `<button class="evchip" data-cc="${k}" aria-pressed="${C.cat===k}">${k==="funk"?`<i style="background:var(--accent)"></i>`:""}${t} <span class="num" style="color:var(--ink-3);font-size:11px">${n}</span></button>`; }).join("");
+  $("#cFilters").querySelectorAll("[data-cc]").forEach(b => b.onclick = () => { C.cat = b.dataset.cc; renderClubs(); });
+  const list = L.filter(c => C.cat==="all" || (C.cat==="funk" ? isFunkClub(c) : !isFunkClub(c)))
+    .slice().sort((a,b) => (b.funk - a.funk) || (a.date+a.start).localeCompare(b.date+b.start));
+  if (!list.length) { $("#clubs").innerHTML = `<div class="empty"><b>${L.length ? "这一类暂时没有活动" : "夜店活动将在下次每日更新时出现"}</b>每天 07:00 更新</div>`; return; }
+  $("#clubs").innerHTML = list.map(c => { const [y,m,d] = c.date.split("-");
+    const g = (c.genres_zh && c.genres_zh.length ? c.genres_zh : c.genres).slice(0,3);
+    return `<a class="ev${c.funk?" funk":""}" href="${esc(c.url)}" target="_blank" rel="noopener">
+      <div class="img" ${imgStyle(c.image)}>${c.image?"":`<div class="ph" style="position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:26px;color:var(--pink)">Club</div>`}
+        <div class="date"><b>${+d}</b><small>${+m}月</small></div></div>
+      <div class="body"><div class="meta">${c.funk?`<span class="flag">FUNK</span>`:""}<span class="gen">${g.map(x=>`<span>${esc(x)}</span>`).join("")}</span></div>
+      <h3>${esc(c.title_zh || c.title)}</h3>${c.title_zh?`<div class="orig">${esc(c.title)}</div>`:""}
+      ${c.note_zh?`<p>${esc(c.note_zh)}</p>`:(c.artists&&c.artists.length?`<p>${esc(c.artists.join(" · "))}</p>`:"")}
+      <div class="where">${wk(c.date)} ${esc(c.start||"")}${c.end?"–"+esc(c.end):""} · ${esc(c.venue)}${costTxt(c.cost)}</div></div></a>`; }).join("");
+}
+
+/* ---------- street dance: Milan first, fall back to Italy / Europe when Milan has no locking ---------- */
+const D = { scope:null, type:"全部", auto:false };
+document.querySelectorAll("[data-dscope]").forEach(b => b.onclick = () => { D.scope = b.dataset.dscope; D.auto = false; renderDance(); });
+const SCOPE_ZH = {milan:"米兰", italy:"意大利", europe:"欧洲"};
+function danceIn(sc){ return (S.dance || []).filter(d => d.scope===sc); }
+function renderDance(){
+  if (!D.scope && (S.dance || []).length) {  // pick the nearest area that actually has locking
+    D.scope = ["milan","italy","europe"].find(sc => danceIn(sc).some(d => d.locking)) || ["milan","italy","europe"].find(sc => danceIn(sc).length) || "milan";
+    D.auto = D.scope !== "milan";
+  }
+  const scope = D.scope || "milan";
+  document.querySelectorAll("[data-dscope]").forEach(b => b.setAttribute("aria-pressed", b.dataset.dscope===scope));
+  const all = danceIn(scope);
+  const types = ["全部","比赛","公开课","活动"];
+  $("#dFilters").innerHTML = types.map(t => { const n = t==="全部" ? all.length : all.filter(d => d.type===t).length;
+    return `<button class="evchip" data-dt="${t}" aria-pressed="${D.type===t}">${t} <span class="num" style="color:var(--ink-3);font-size:11px">${n}</span></button>`; }).join("");
+  $("#dFilters").querySelectorAll("[data-dt]").forEach(b => b.onclick = () => { D.type = b.dataset.dt; renderDance(); });
+  const hasLock = all.some(d => d.locking);
+  $("#dHint").hidden = !(D.auto || (!hasLock && all.length));
+  $("#dHint").textContent = D.auto ? `米兰近期没有找到 Locking 相关活动，已切换到${SCOPE_ZH[scope]}。` : `${SCOPE_ZH[scope]}近期没有找到 Locking 相关活动，可以切换到更大范围看看。`;
+  const t = romeDate();
+  const list = all.filter(d => D.type==="全部" || d.type===D.type)
+    .slice().sort((a,b) => (b.locking - a.locking) || ((a.start||"9")).localeCompare(b.start||"9"));
+  if (!list.length) { $("#dance").innerHTML = `<div class="empty"><b>${(S.dance||[]).length ? `${SCOPE_ZH[scope]}暂时没有这一类活动` : "街舞活动将在下次每日更新时出现"}</b>每天 07:00 更新，换个地区看看。</div>`; return; }
+  $("#dance").innerHTML = list.map(d => { const [y,m,dd] = (d.start||"--").split("-");
+    const past = d.end ? d.end < t : d.start && d.start < t;
+    return `<a class="ev${d.locking?" lock":""}" href="${esc(d.url)}" target="_blank" rel="noopener">
+      <div class="img" ${imgStyle(d.image)}>${d.image?"":`<div class="ph" style="position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:24px;color:var(--violet)">${esc(d.type||"街舞")}</div>`}
+        ${d.start?`<div class="date"><b>${+dd}</b><small>${+m}月</small></div>`:""}</div>
+      <div class="body"><div class="meta">${d.locking?`<span class="flag v">LOCKING</span>`:""}<span class="pill" style="background:var(--violet)">${esc(d.type||"活动")}</span><span class="gen">${(d.styles||[]).filter(x => !/^locking$/i.test(x) || !d.locking).slice(0,3).map(x=>`<span>${esc(x)}</span>`).join("")}</span>${past?`<span class="state" style="color:var(--ink-3)">已结束</span>`:""}</div>
+      <h3>${esc(d.title_zh)}</h3><p>${esc(d.summary_zh||"")}</p>
+      <div class="where">${d.start?esc(dateRange(d)):"日期待定"}${d.time_zh?" · "+esc(d.time_zh):""}${d.city_zh?" · "+esc(d.city_zh):""}${d.venue_zh?" · "+esc(d.venue_zh):""}</div>
+      <div class="orig">来源：${esc(d.source||"")}</div></div></a>`; }).join("");
+}
+
+/* ---------- market data: Milan housing + flights (data/market.json) ---------- */
+const M = { data:null, hDeal:"rent", hKind:"home", hType:"2", hZone:null, hShow:18, fReg:"europe", fSel:null, fAll:false };
+const TYPE_ZH = {"2":"一居室","1":"开间","3":"两居室","4":"三居室+","0":"户型不详"};
+const TYPE_IT = {"2":"bilocale","1":"monolocale","3":"trilocale","4":"4 locali+"};
+const TYPE_ORDER = {"2":0,"1":1,"3":2,"4":3,"0":4};
+const tkey = l => l.rooms == null ? "0" : String(Math.min(l.rooms, 4));
+const prettyZone = n => String(n||"").toLowerCase().replace(/(^|[\s\-'.(])([a-zà-ù])/g, (m,a,b) => a + b.toUpperCase()).replace(/\bQ\.re\b/g,"Q.re");
+const eur = (v, d=0) => "€" + Number(v).toLocaleString("zh-CN", {minimumFractionDigits:d, maximumFractionDigits:d});
+const mix = (tok, pct) => `color-mix(in srgb, var(${tok}) ${Math.round(pct)}%, var(--map-land))`;
+
+async function loadMarket(){
+  try {
+    const [d, mi, wo] = await Promise.all([getJSON("data/market.json"), fetch("geo/milan.json").then(r=>r.json()), fetch("geo/world.json").then(r=>r.json())]);
+    M.data = d; S.geo.milan = mi.features; S.geo.world = topojson.feature(wo, wo.objects.countries).features;
+    renderHousing(); renderFlights();
+  } catch(e) {
+    console.warn("market", e);
+    $("#hSide").innerHTML = $("#fSide").innerHTML = `<div class="empty"><b>暂时读取不到数据</b>请稍后刷新页面。</div>`;
+  }
+}
+
+/* housing */
+document.querySelectorAll("[data-hdeal]").forEach(b => b.onclick = () => { M.hDeal = b.dataset.hdeal; M.hShow = 18; renderHousing(); });
+document.querySelectorAll("[data-hkind]").forEach(b => b.onclick = () => { M.hKind = b.dataset.hkind; M.hShow = 18; M.hZone = null; renderHousing(); });
+$("#hMoreBtn").onclick = () => { M.hShow += 18; renderHList(); };
+
+function hListings(){
+  const H = M.data.housing;
+  let L = H.listings.filter(l => l.deal===M.hDeal && l.kind===M.hKind);
+  if (M.hKind==="home" && M.hType!=="all") L = L.filter(l => tkey(l)===M.hType);
+  if (M.hZone) L = L.filter(l => l.zone===M.hZone);
+  if (M.hKind==="home" && M.hType==="all") L = L.slice().sort((a,b) => TYPE_ORDER[tkey(a)] - TYPE_ORDER[tkey(b)]);
+  return L;
+}
+// map value per zone: rent -> median €/m² per month; buy -> gross yield %; shops -> number of listings
+function zoneValue(n){
+  const H = M.data.housing, z = H.zones[n];
+  if (M.hKind==="shop") { const k = H.listings.filter(l => l.kind==="shop" && l.deal===M.hDeal && l.zone===n).length; return k || null; }
+  if (!z) return null;
+  return M.hDeal==="rent" ? (z.n_rent >= 2 ? z.rent : null) : (z.yield ?? null);
+}
+function renderHousing(){
+  if (!M.data) return;
+  const H = M.data.housing;
+  document.querySelectorAll("[data-hdeal]").forEach(b => b.setAttribute("aria-pressed", b.dataset.hdeal===M.hDeal));
+  document.querySelectorAll("[data-hkind]").forEach(b => b.setAttribute("aria-pressed", b.dataset.hkind===M.hKind));
+  $("#hSub").textContent = `${H.sample} 套在售/在租房源抽样 · ${H.source} · ${fmtDT(M.data.updatedAt)}`;
+  const types = M.hKind==="home" ? ["2","1","3","4","all"] : [];
+  $("#hTypes").innerHTML = types.map(t => { const k = H.listings.filter(l => l.deal===M.hDeal && l.kind==="home" && (t==="all" || tkey(l)===t)).length;
+    return `<button class="evchip" data-ht="${t}" aria-pressed="${M.hType===t}">${t==="all"?"全部户型":TYPE_ZH[t]} <span class="num" style="color:var(--ink-3);font-size:11px">${k}</span></button>`; }).join("");
+  $("#hTypes").querySelectorAll("[data-ht]").forEach(b => b.onclick = () => { M.hType = b.dataset.ht; M.hShow = 18; renderHousing(); });
+  $("#hZoneChip").innerHTML = M.hZone ? `<button class="filter-chip" id="hClear" aria-label="清除街区筛选">${esc(prettyZone(M.hZone))} ×</button>` : "";
+  if (M.hZone) $("#hClear").onclick = () => { M.hZone = null; renderHousing(); };
+  drawHMap(); renderHSide(); renderHList();
+}
+function hScale(){
+  const vals = S.geo.milan.map(f => zoneValue(f.properties.name)).filter(v => v != null).sort((a,b)=>a-b);
+  return { lo: d3.quantile(vals,.05) ?? 0, hi: d3.quantile(vals,.95) ?? 1, tok: M.hKind==="shop" ? "--accent" : M.hDeal==="rent" ? "--blue" : "--green" };
+}
+function drawHMap(){
+  const feats = S.geo.milan; if (!feats) return;
+  const svg = d3.select("#hmap"); svg.selectAll("*").remove();
+  const W = 600, H = 560;
+  const proj = d3.geoMercator().fitExtent([[8,8],[W-8,H-8]], {type:"FeatureCollection", features:feats}), path = d3.geoPath(proj);
+  const sc = hScale();
+  svg.append("g").selectAll("path").data(feats).join("path")
+    .attr("class", d => "hz" + (M.hZone===d.properties.name ? " sel" : ""))
+    .attr("d", path).attr("tabindex", 0).attr("role", "button").attr("aria-label", d => prettyZone(d.properties.name))
+    .style("fill", d => { const v = zoneValue(d.properties.name); if (v == null) return "var(--map-land)";
+      const t = Math.max(0, Math.min(1, (v - sc.lo) / ((sc.hi - sc.lo) || 1))); return mix(sc.tok, 18 + 72 * t); })
+    .on("mouseenter", (ev,d) => { if (!TOUCH) renderHSide(d.properties.name); })
+    .on("mouseleave", () => { if (!TOUCH) renderHSide(); })
+    .on("focus", (ev,d) => renderHSide(d.properties.name))
+    .on("click", (ev,d) => setHZone(d.properties.name))
+    .on("keydown", (ev,d) => { if (ev.key==="Enter" || ev.key===" ") { ev.preventDefault(); setHZone(d.properties.name); } });
+  // city-centre landmark so the shape reads as Milan
+  const [dx, dy] = proj([9.1900, 45.4642]);
+  svg.append("text").attr("class","lbl").attr("x",dx).attr("y",dy).attr("text-anchor","middle").text("Duomo");
+}
+function setHZone(n){ M.hZone = M.hZone===n ? null : n; M.hShow = 18; renderHousing(); }
+function renderHSide(hover){
+  const H = M.data.housing, sc = hScale(), zn = hover || M.hZone;
+  const unit = M.hKind==="shop" ? "套门店" : M.hDeal==="rent" ? "€/㎡·月" : "年回报 %";
+  const legend = `<div class="scale"><span>${M.hKind==="shop"?"少":M.hDeal==="rent"?"便宜":"回报低"}</span><i style="background:linear-gradient(90deg,${mix(sc.tok,18)},${mix(sc.tok,90)})"></i><span>${M.hKind==="shop"?"多":M.hDeal==="rent"?"贵":"回报高"}</span></div>`;
+  let h;
+  if (zn) {
+    const z = H.zones[zn] || {};
+    const shops = H.listings.filter(l => l.kind==="shop" && l.zone===zn);
+    h = `<h3>${esc(prettyZone(zn))}<small>米兰街区（NIL）</small></h3>
+      <div class="kv"><div><span>租金中位</span><b>${z.rent!=null?eur(z.rent,1):"–"}<small> /㎡·月</small></b></div>
+      <div><span>售价中位</span><b>${z.buy!=null?eur(z.buy):"–"}<small> /㎡</small></b></div>
+      <div><span>租售比</span><b>${z.ratio?"1 : "+z.ratio:"–"}</b></div>
+      <div><span>毛租金回报</span><b>${z.yield!=null?z.yield+"%":"–"}</b></div></div>
+      <p class="note">样本：租 ${z.n_rent||0} 套、售 ${z.n_buy||0} 套（30–150㎡ 住房）${shops.length?`，门店 ${shops.length} 套`:""}。样本少于 3 套时只作参考。</p>
+      ${hover ? "" : `<p class="note">下方房源已筛选为该街区，再点一次地图取消。</p>`}`;
+  } else {
+    const ranked = Object.entries(H.zones).map(([n,z]) => [n, M.hKind==="shop" ? zoneValue(n) : M.hDeal==="rent" ? (z.n_rent>=3 ? z.rent : null) : z.yield]).filter(x => x[1] != null);
+    ranked.sort((a,b) => M.hKind==="shop" || M.hDeal==="buy" ? b[1]-a[1] : a[1]-b[1]);
+    const title = M.hKind==="shop" ? "门店房源最多的街区" : M.hDeal==="rent" ? "租金最便宜的街区" : "租售比最好的街区";
+    const fmt = v => M.hKind==="shop" ? v+" 套" : M.hDeal==="rent" ? eur(v,1) : v+"%";
+    h = `<h3>全市概况<small>点击地图上的街区查看详情并筛选房源</small></h3>
+      <div class="kv"><div><span>全市租金中位</span><b>${eur(H.city.rent,1)}<small> /㎡·月</small></b></div>
+      <div><span>全市售价中位</span><b>${eur(H.city.buy)}<small> /㎡</small></b></div>
+      <div><span>全市租售比</span><b>1 : ${Math.round(H.city.buy/H.city.rent)}</b></div>
+      <div><span>毛租金回报</span><b>${(H.city.rent*12/H.city.buy*100).toFixed(1)}%</b></div></div>
+      <div><div class="mw-sec" style="border:0;padding:0;margin:0 0 4px">${title}</div>
+      <div class="rank">${ranked.slice(0,6).map(([n,v],i) => `<button data-z="${esc(n)}"><i>${i+1}</i><span>${esc(prettyZone(n))}</span><b>${fmt(v)}</b></button>`).join("")}</div></div>`;
+  }
+  $("#hSide").innerHTML = h + legend + `<p class="note">地图颜色：${unit}。租售比 1:N 表示房价相当于 N 个月租金，N 越小回报越高。数据来自 ${esc(H.source)} 当日房源抽样，不是官方成交价。</p>`;
+  $("#hSide").querySelectorAll("[data-z]").forEach(b => b.onclick = () => setHZone(b.dataset.z));
+}
+// listing sources: one coloured tile per site
+const SRC = {Trovacasa:{c:"#2e7d55",t:"T"}, Idealista:{c:"#c9a400",t:"id"}, Immobiliare:{c:"#2f6db5",t:"im"}, Subito:{c:"#c8372d",t:"S"}};
+const srcTag = s => { const x = SRC[s] || {c:"var(--ink-3)", t:(s||"?")[0]}; return `<span class="src" title="${esc(s)}"><i style="background:${x.c}">${x.t}</i>${esc(s)}</span>`; };
+function valueBadge(l){
+  if (l.kind==="shop") return `<span class="val mid">${eur(l.ppm, l.deal==="rent"?1:0)}/㎡${l.deal==="rent"?"·月":""}</span>`;
+  if (l.deal==="rent" && l.vs_zone != null) {
+    const v = l.vs_zone; return v <= -5 ? `<span class="val good">比片区均价低 ${-v}%</span>` : v >= 5 ? `<span class="val bad">比片区均价高 ${v}%</span>` : `<span class="val mid">接近片区均价</span>`;
+  }
+  if (l.deal==="buy" && l.est_yield != null) {
+    const y = l.est_yield; return `<span class="val ${y>=5?"good":y>=3.5?"mid":"bad"}">估算租金回报 ${y}%</span>`;
+  }
+  return "";
+}
+function renderHList(){
+  const L = hListings(), show = L.slice(0, M.hShow);
+  if (!L.length) { $("#hList").innerHTML = `<div class="empty"><b>没有符合条件的房源</b>换个户型或街区看看。</div>`; $("#hMore").hidden = true; return; }
+  $("#hList").innerHTML = show.map(l => { const t = l.kind==="shop" ? "门店" : TYPE_ZH[tkey(l)];
+    return `<a class="hl" href="${esc(l.url)}" target="_blank" rel="noopener">
+      <div class="img" ${l.img?`style="background-image:url('${l.img}')"`:""}>${l.img?"":`<div class="ph">${esc(t)}</div>`}</div>
+      <div class="body"><div class="meta"><span class="pill">${esc(t)}</span>${l.zone?`<span class="pill place">${esc(prettyZone(l.zone))}</span>`:(l.area?`<span class="pill place">${esc(l.area)}</span>`:"")}</div>
+      <div class="hp">${eur(l.price)}<small>${l.deal==="rent"?" /月":""}</small></div>
+      <div class="hs">${l.mq} ㎡${l.rooms?` · ${l.rooms} 室（${TYPE_IT[tkey(l)]||"locali"}）`:""} · ${eur(l.ppm, l.deal==="rent"?1:0)}/㎡</div>
+      ${valueBadge(l)}
+      ${l.alts && l.alts.length ? `<div class="cmp">比价：${[{source:l.source, price:l.price}].concat(l.alts).sort((a,b)=>a.price-b.price).map((x,i)=>`${i===0?"<b>":""}${esc(x.source)} ${eur(x.price)}${i===0?"（最低）</b>":""}`).join(" · ")}</div>` : ""}
+      <p title="${esc(l.title)}">${srcTag(l.source || "Trovacasa")} ${esc(l.title)}</p></div></a>`; }).join("");
+  $("#hMore").hidden = L.length <= M.hShow;
+}
+
+/* flights */
+document.querySelectorAll("[data-freg]").forEach(b => b.onclick = () => { M.fReg = b.dataset.freg; M.fSel = null; M.fAll = false; renderFlights(); });
+$("#fMoreBtn").onclick = () => { M.fAll = true; renderFList(); };
+const MILAN = [9.19, 45.46];
+// Europe fares come in euro, China fares in renminbi
+const money = (f, v = f.price) => (f.cur==="CNY" ? "¥" : "€") + Number(v).toLocaleString("zh-CN", {minimumFractionDigits: v%1 ? 2 : 0, maximumFractionDigits: 2});
+const othersTxt = f => (f.others||[]).map(o => `${esc(o.airline)} ${money(f, o.price)}`).join("，");
+function fList(){ return (M.data.flights[M.fReg] || []).slice().sort((a,b) => a.price - b.price); }
+function fTier(f, L){ const i = L.indexOf(f), n = L.length; return i < n/3 ? "--green" : i < 2*n/3 ? "--accent" : "--red"; }
+function renderFlights(){
+  if (!M.data) return;
+  const F = M.data.flights;
+  document.querySelectorAll("[data-freg]").forEach(b => b.setAttribute("aria-pressed", b.dataset.freg===M.fReg));
+  $("#fSub").textContent = `${fmtMD(F.window[0])} – ${fmtMD(F.window[1])} · 单程 · 1 名成人含税价 · ${M.fReg==="europe"?"欧元":"人民币"}`;
+  drawFMap(); renderFSide(); renderFList();
+}
+function drawFMap(){
+  const L = fList(), svg = d3.select("#fmap"); svg.selectAll("*").remove();
+  const W = 800, H = 560, isEu = M.fReg==="europe";
+  const feats = S.geo.world; if (!feats) return;
+  const pts = L.map(f => [f.lon, f.lat]).concat([MILAN]);
+  const proj = isEu ? d3.geoConicConformal().parallels([38,60]).rotate([-10,0]) : d3.geoConicEquidistant().parallels([25,50]).rotate([-65,0]);
+  // China view zooms onto China itself (Milan sits off the left edge); Europe fits Milan plus every destination
+  proj.fitExtent([[30,30],[W-30,H-30]], {type:"Feature", geometry:{type:"MultiPoint", coordinates: isEu ? pts : [[76,20],[132,20],[76,50],[132,50]]}});
+  const path = d3.geoPath(proj);
+  svg.append("defs").append("clipPath").attr("id","fclip").append("rect").attr("width",W).attr("height",H);
+  const g = svg.append("g").attr("clip-path","url(#fclip)");
+  g.append("g").selectAll("path").data(feats).join("path").attr("class", d => "land" + (!isEu && (d.id==="156" || d.properties.name==="China" || d.properties.name==="Taiwan") ? " cn" : "")).attr("d", path);
+  g.append("g").selectAll("path").data(L).join("path").attr("class", f => "arc" + (M.fSel===f.code ? " on" : ""))
+    .attr("d", f => path({type:"LineString", coordinates:[MILAN, [f.lon, f.lat]]}));
+  const labelled = new Set((isEu ? L.slice(0, 14) : L).map(f => f.code));
+  if (M.fSel) labelled.add(M.fSel);
+  const dg = g.append("g").selectAll("g").data(L.slice().reverse()).join("g").attr("class","dest")
+    .attr("transform", f => `translate(${proj([f.lon, f.lat])})`).attr("tabindex", 0).attr("role","button")
+    .attr("aria-label", f => `${f.zh} ${money(f)}`)
+    .on("mouseenter", (ev,f) => { if (!TOUCH) renderFSide(f); }).on("mouseleave", () => { if (!TOUCH) renderFSide(); })
+    .on("click", (ev,f) => selectFlight(f.code))
+    .on("keydown", (ev,f) => { if (ev.key==="Enter" || ev.key===" ") { ev.preventDefault(); selectFlight(f.code); } });
+  dg.append("circle").attr("r", f => M.fSel===f.code ? 8 : labelled.has(f.code) ? 5.5 : 4).style("fill", f => `var(${fTier(f, L)})`);
+  dg.filter(f => labelled.has(f.code)).append("text").attr("x", 8).attr("y", 4).text(f => `${f.zh} ${money(f)}`);
+  const [mx, my] = proj(MILAN);
+  if (mx >= 0 && mx <= W) {
+    const hg = g.append("g").attr("class","home").attr("transform",`translate(${mx},${my})`);
+    hg.append("circle").attr("r", 6); hg.append("text").attr("x", -10).attr("y", -10).attr("text-anchor","end").text("米兰");
+  } else g.append("g").attr("class","home").append("text").attr("x", 12).attr("y", 40).text("← 航线从米兰出发");
+}
+function selectFlight(code){ M.fSel = M.fSel===code ? null : code; const L = fList(), i = L.findIndex(f => f.code===code);
+  if (i >= 30) M.fAll = true; drawFMap(); renderFSide(); renderFList();
+  const row = document.querySelector(`.frow[data-code="${code}"]`); if (row && M.fSel) row.scrollIntoView({block:"nearest", behavior:"smooth"}); }
+const stopsZh = f => f.stops ? `${f.stops} 次中转` : "直飞";
+function renderFSide(hover){
+  const L = fList(), f = hover || L.find(x => x.code===M.fSel);
+  let h;
+  if (f) {
+    h = `<h3>${esc(f.zh)}<small>${esc(f.city || f.code)} · ${esc(f.code)}${f.country?` · ${esc(f.country)}`:""}</small></h3>
+      <div class="kv"><div><span>最低单程价</span><b>${money(f)}</b></div>
+      <div><span>出发日期</span><b>${fmtMD(f.date)}<small> ${wk(f.date)}${f.time?" "+esc(f.time):""}</small></b></div>
+      <div><span>航班</span><b style="font-size:13px">${esc(f.airline)}</b></div>
+      <div><span>行程</span><b style="font-size:13px">${stopsZh(f)}${f.duration?` · ${esc(f.duration.replace(" hr"," 小时").replace(" min"," 分"))}`:""}</b></div></div>
+      <p class="note">从 ${esc(f.from)} 出发。${f.region==="europe"?`${esc(f.airline)}基础票价，含税，不含托运行李和选座。`:`Google Flights 在未来 30 天里每隔 5 天查一次，这是查到的最低价（共查 ${f.checked} 天），含税，以人民币计。`}${f.others&&f.others.length?`<br>同一城市其他航空公司的最低价：${othersTxt(f)}。`:""}</p>
+      <a class="btn" href="${esc(f.url)}" target="_blank" rel="noopener">${f.region==="europe"?`去${esc(f.airline)}官网订票`:"在 Google Flights 查看"} ↗</a>`;
+  } else {
+    const c = L[0];
+    h = `<h3>${M.fReg==="europe"?"欧洲":"中国"}最便宜的去处<small>点击地图上的城市查看航班</small></h3>
+      ${c ? `<div class="kv"><div><span>最低价</span><b>${money(c)}</b></div><div><span>目的地</span><b style="font-size:14px">${esc(c.zh)}</b></div>
+      <div><span>可选目的地</span><b>${L.length}</b></div><div><span>中位价格</span><b>${money(c, Math.round(d3.median(L, x=>x.price)))}</b></div></div>` : `<div class="empty"><b>今天没有查到航班</b>明天再看看。</div>`}
+      <div class="scale"><span><i class="tier" style="background:var(--green)"></i>最便宜三分之一</span><span><i class="tier" style="background:var(--accent)"></i>中间</span><span><i class="tier" style="background:var(--red)"></i>最贵</span></div>
+      <p class="note">${M.fReg==="europe"?"欧洲航线来自瑞安航空和 Wizz Air 的公开票价（贝加莫、马尔彭萨、利纳特出发），是每个城市 30 天内的最低单程价，以欧元计，含税，不含托运行李。easyJet 的票价接口不对外开放，暂未包含。":"中国航线来自 Google Flights（米兰所有机场出发，汇总各航空公司），未来 30 天每 5 天抽查一次，取最低价，以人民币计，含税。"}价格随时变动，以订票页面为准。</p>`;
+  }
+  $("#fSide").innerHTML = h;
+}
+function renderFList(){
+  const L = fList(), show = M.fAll ? L : L.slice(0, 30);
+  if (!L.length) { $("#fList").innerHTML = ""; $("#fMore").hidden = true; return; }
+  $("#fList").innerHTML = `<div class="frow hd"><span>目的地</span><span>单程价</span><span>日期</span><span>航班</span><span></span></div>` +
+    show.map(f => `<div class="frow${M.fSel===f.code?" on":""}" data-code="${esc(f.code)}"><span class="c"><b><i class="tier" style="background:var(${fTier(f, L)})"></i>${esc(f.zh)}</b><small>${esc(f.city || "")} ${esc(f.code)}${f.country?" · "+esc(f.country):""}</small></span>
+      <span class="p">${money(f)}</span><span class="d">${fmtMD(f.date)} ${wk(f.date)}</span>
+      <span class="a">${esc(f.airline)} · ${stopsZh(f)}<br>${esc(f.from)}${f.others&&f.others.length?`<br><span style="color:var(--ink-3)">另有 ${othersTxt(f)}</span>`:""}</span>
+      <a href="${esc(f.url)}" target="_blank" rel="noopener">订票 ↗</a></div>`).join("");
+  $("#fList").querySelectorAll(".frow[data-code]").forEach(r => r.onclick = e => { if (!e.target.closest("a")) selectFlight(r.dataset.code); });
+  $("#fMore").hidden = M.fAll || L.length <= 30;
+  $("#fMoreBtn").textContent = `显示全部 ${L.length} 个目的地`;
+}
+
+/* ---------- dialog ---------- */
+const dlg = $("#dlg");
+function showDlg(){ hideTip(); if (!dlg.open) dlg.showModal(); dlg.scrollTop = 0; }
+$("#dlgX").onclick = () => dlg.close();
+dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+
+/* ---------- data (published JSON files, readable without signing in) ---------- */
+const dayCache = {};
+const getJSON = url => fetch(url, {cache:"no-store"}).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+async function setDate(d){
+  S.date = d; S.region = null; renderDates();
+  if (!dayCache[d]) { S.news = []; renderNews(); }
+  try { dayCache[d] = dayCache[d] || await getJSON(`data/${d}.json`); }
+  catch(e) { console.warn(e); if (S.date === d) $("#news").innerHTML = `<div class="empty"><b>这一天的新闻读取失败</b>请稍后刷新页面。</div>`; return; }
+  if (S.date !== d) return;
+  S.news = dayCache[d].news || []; renderNews(); drawMap();
+}
+async function loadLatest(){
+  try {
+    const L = await getJSON("data/latest.json");
+    const prevRun = S.status?.run, prevDate = S.status?.date;
+    S.status = L.status; S.weather = L.weather; S.events = L.events || []; S.live = true;
+    renderStatus(); renderMilan(); renderCities(); renderEvFilters(); renderEvents();
+    S.clubs = L.clubs || []; S.dance = L.dance || []; renderClubs(); renderDance();
+    if (prevRun && prevRun !== S.status.run) delete dayCache[S.status.date];
+    if (!S.date || S.date === prevDate || prevRun !== S.status.run) setDate(S.date && S.date !== prevDate ? S.date : S.status.date);
+    else { renderDates(); drawMap(); }
+  } catch(e) {
+    console.warn(e); S.live = false; renderStatus();
+    if (!S.status) { $("#statusText").textContent = "数据读取失败，请稍后刷新"; $("#news").innerHTML = `<div class="empty"><b>暂时读取不到数据</b>请稍后刷新页面。</div>`; }
+  }
+}
+function boot(){
+  renderStatus(); renderEvFilters(); renderEvents(); renderNews(); renderCities(); renderClubs(); renderDance();
+  loadGeo().catch(e => console.warn("geo", e)).then(loadMarket);
+  loadLatest();
+  setInterval(loadLatest, 10 * 60000);
+}
+setInterval(renderStatus, 60000);
+document.querySelectorAll("[data-scope]").forEach(b => b.setAttribute("aria-pressed", b.dataset.scope===S.scope));
+document.querySelectorAll("[data-layer]").forEach(b => b.setAttribute("aria-pressed", b.dataset.layer===S.layer));
+$("#mapTitle").textContent = S.scope==="italy" ? "意大利地图" : "欧洲地图";
+$("#wxTitle").textContent = S.scope==="italy" ? "意大利主要城市天气" : "欧洲主要城市天气";
+boot();
+})();
+</script>
+
+</body></html>
